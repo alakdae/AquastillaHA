@@ -1,0 +1,14 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "data": {
+          "username": "Username",
+          "password": "Password"
+        },
+        "description": "Enter your Aquastilla email and password. No SSO account supported.",
+        "title": "Setup"
+      }
+    }
+  }
+}
