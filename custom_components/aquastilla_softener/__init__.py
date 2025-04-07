@@ -1,47 +1,39 @@
 import logging
-from typing import Any, Dict, Optional
-
 from homeassistant import config_entries, core
-import voluptuous as vol
-
-from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD
-from .aquastilla import AquastillaSoftener
+from aquastilla_softener import AquastillaSoftener
+from .const import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-DATA_SCHEMA_USER = vol.Schema(
-    {
-        vol.Required(CONF_USERNAME): str,
-        vol.Required(CONF_PASSWORD): str,
-    }
-)
+async def async_setup_entry(
+    hass: core.HomeAssistant, entry: config_entries.ConfigEntry
+) -> bool:
+    hass.data.setdefault(DOMAIN, {})
+    hass_data = dict(entry.data)
+
+    unsub_options_update_listener = entry.add_update_listener(options_update_listener)
+    hass_data["unsub_options_update_listener"] = unsub_options_update_listener
+    hass.data[DOMAIN][entry.entry_id] = hass_data
+
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+
+    return True
 
 
-class AquastillaSoftenerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Config flow for AquastillaSoftener integration."""
+async def options_update_listener(
+    hass: core.HomeAssistant, config_entry: config_entries.ConfigEntry
+):
+    await hass.config_entries.async_reload(config_entry.entry_id)
 
-    async def async_step_user(self, user_input: Optional[Dict[str, Any]] = None):
-        """Handle user step."""
-        errors: Dict[str, str] = {}
 
-        if user_input is not None:
-            email = user_input[CONF_USERNAME]
-            password = user_input[CONF_PASSWORD]
+async def async_unload_entry(
+    hass: core.HomeAssistant, entry: config_entries.ConfigEntry
+) -> bool:
+    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
 
-            # Validate credentials
-            try:
-                softener = AquastillaSoftener(email=email, password=password)
-                softener.list_devices()  # Try fetching devices to verify login
+    hass.data[DOMAIN][entry.entry_id]["unsub_options_update_listener"]()
 
-                return self.async_create_entry(
-                    title="AQUASTILLA DUO SMART", data=user_input
-                )
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
 
-            except Exception as e:
-                _LOGGER.error("Authentication failed: %s", e)
-                errors["base"] = "auth_failed"
-
-        return self.async_show_form(
-            step_id="user", data_schema=DATA_SCHEMA_USER, errors=errors
-        )
-
+    return unload_ok

@@ -3,12 +3,21 @@
     "step": {
       "user": {
         "data": {
-          "username": "Użytkownik",
+          "username": "Nazwa użytkownika",
           "password": "Hasło"
         },
-        "description": "Wprowadź email i hasło używane w aplikacji Aquastilla. Logowanie przez SSO nie jest wspierane.",
+        "description": "Wprowadź swój adres e-mail i hasło do Aquastilla. Konto SSO nie jest obsługiwane.",
         "title": "Konfiguracja"
       }
+    }
+  },
+  "sensor": {
+    "aquastillasoftener": {
+      "salt_level": "Poziom soli",
+      "available_water": "Dostępna woda",
+      "water_usage_today": "Zużycie wody dzisiaj",
+      "expected_regeneration": "Oczekiwana data regeneracji",
+      "last_regeneration": "Ostatnia regeneracja"
     }
   }
 }

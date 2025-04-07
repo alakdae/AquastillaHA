@@ -1,11 +1,13 @@
 import logging
 from typing import Any, Dict, Optional
+from .sensor import async_setup_entry
 
 from homeassistant import config_entries
+from homeassistant import core
 import voluptuous as vol
 
 from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_DEVICE
-from .aquastilla import AquastillaSoftener
+from aquastilla_softener import AquastillaSoftener
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -35,7 +37,7 @@ class AquastillaSoftenerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             # Validate credentials and fetch devices
             try:
                 softener = AquastillaSoftener(email=email, password=password)
-                self.devices = softener.list_devices()
+                self.devices = await self.hass.async_add_executor_job(softener.list_devices)
 
                 if not self.devices:
                     errors["base"] = "no_devices"
@@ -62,9 +64,11 @@ class AquastillaSoftenerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
 
             if selected_device:
+                await self.async_set_unique_id(selected_uuid)
+                self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title=f"{selected_device['model']['model']}",
-                    data={**self.data, CONF_DEVICE: selected_uuid},
+                    data={**self.data, CONF_DEVICE: selected_device},
                 )
 
             errors["base"] = "device_not_found"
