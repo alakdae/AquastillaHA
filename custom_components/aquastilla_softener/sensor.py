@@ -3,8 +3,12 @@ from datetime import datetime, timedelta
 import logging
 from typing import Optional
 from homeassistant.helpers.device_registry import DeviceInfo
-
 from homeassistant.core import callback
+from homeassistant.helpers.update_coordinator import (
+    DataUpdateCoordinator,
+    UpdateFailed,
+    CoordinatorEntity,
+)
 from homeassistant.helpers.update_coordinator import (
     DataUpdateCoordinator,
     UpdateFailed,
@@ -27,6 +31,7 @@ from homeassistant.components.sensor import (
 from homeassistant.const import PERCENTAGE, UnitOfVolume
 
 from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_DEVICE
+from .coordinator import AquastillaSoftenerCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -55,45 +60,22 @@ async def async_setup_entry(
     sensors = [
         clz(coordinator, device, entity_description)
         for clz, entity_description in (
-            (AquastillaSoftenerStateSensor, SensorEntityDescription(key="State", name="State")),
+            (AquastillaSoftenerStateSensor, SensorEntityDescription(
+                key="State", translation_key="state")),
             (AquastillaSoftenerSaltLevelSensor, SensorEntityDescription(
-                key="SALT_LEVEL", name="Salt level", state_class=SensorStateClass.MEASUREMENT, native_unit_of_measurement=PERCENTAGE)),
+                key="SALT_LEVEL", translation_key="salt_level", state_class=SensorStateClass.MEASUREMENT, native_unit_of_measurement=PERCENTAGE)),
             (AquastillaSoftenerAvailableWaterSensor, SensorEntityDescription(
-                key="AVAILABLE_WATER", name="Available water", state_class=SensorStateClass.TOTAL, device_class=SensorDeviceClass.WATER, icon="mdi:water")),
+                key="AVAILABLE_WATER", translation_key="available_water", state_class=SensorStateClass.TOTAL, device_class=SensorDeviceClass.WATER, icon="mdi:water")),
             (AquastillaSoftenerWaterUsageTodaySensor, SensorEntityDescription(
-                key="WATER_USAGE_TODAY", name="Today water usage", state_class=SensorStateClass.TOTAL_INCREASING, device_class=SensorDeviceClass.WATER, icon="mdi:water-minus")),
+                key="WATER_USAGE_TODAY", translation_key="water_usage_today", state_class=SensorStateClass.TOTAL_INCREASING, device_class=SensorDeviceClass.WATER, icon="mdi:water-minus")),
             (AquastillaSoftenerExpectedRegenerationSensor, SensorEntityDescription(
-                key="EXPECTED_REGENERATION_DATE", name="Expected Regeneration Date", device_class=SensorDeviceClass.TIMESTAMP)),
+                key="EXPECTED_REGENERATION_DATE", translation_key="expected_regeneration_date", device_class=SensorDeviceClass.TIMESTAMP)),
             (AquastillaSoftenerLastRegenerationSensor, SensorEntityDescription(
-                key="LAST_REGENERATION", name="Last Regeneration", device_class=SensorDeviceClass.TIMESTAMP)),
+                key="LAST_REGENERATION", translation_key="last_regeneration", device_class=SensorDeviceClass.TIMESTAMP)),
         )
     ]
 
     async_add_entities(sensors)
-
-class AquastillaSoftenerCoordinator(DataUpdateCoordinator):
-    def __init__(self, hass: core.HomeAssistant, softener: AquastillaSoftener, device: dict):
-        super().__init__(
-            hass,
-            _LOGGER,
-            name="Aquastilla Softener",
-            update_interval=UPDATE_INTERVAL,
-        )
-        self._softener = softener
-        self._device = device
-        self.device_data: Optional[AquastillaSoftenerData] = None  # type hint
-
-    async def _async_update_data(self) -> AquastillaSoftenerData:
-        try:
-            data = await self.hass.async_add_executor_job(
-                self._softener.get_device_data, self._device
-            )
-            self.device_data = data
-            _LOGGER.debug("Fetched data: %s", data)
-            return data
-        except Exception as err:
-            raise UpdateFailed(f"Get data failed: {err}")
-
 
 class AquastillaSoftenerSensor(SensorEntity, CoordinatorEntity, ABC):
     def __init__(
@@ -187,3 +169,4 @@ class AquastillaSoftenerExpectedRegenerationSensor(AquastillaSoftenerSensor):
 class AquastillaSoftenerLastRegenerationSensor(AquastillaSoftenerSensor):
     def update(self, data: AquastillaSoftenerData):
         self._attr_native_value = data.last_regeneration
+

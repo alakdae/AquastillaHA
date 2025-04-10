@@ -6,18 +6,56 @@
           "username": "Nazwa użytkownika",
           "password": "Hasło"
         },
-        "description": "Wprowadź swój adres e-mail i hasło do Aquastilla. Konto SSO nie jest obsługiwane.",
+        "description": "Wprowadź swój adres e-mail i hasło Aquastilla. Logowanie przez SSO nie jest obsługiwane.",
         "title": "Konfiguracja"
       }
     }
   },
-  "sensor": {
-    "aquastillasoftener": {
-      "salt_level": "Poziom soli",
-      "available_water": "Dostępna woda",
-      "water_usage_today": "Zużycie wody dzisiaj",
-      "expected_regeneration": "Oczekiwana data regeneracji",
-      "last_regeneration": "Ostatnia regeneracja"
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Stan",
+        "state": {
+          "brineRefill": "Uzupełnianie solanki",
+          "saltDissolve": "Rozpuszczanie soli",
+          "backwash": "Płukanie wsteczne",
+          "brineCollect": "Zbieranie solanki",
+          "fastWash": "Szybkie płukanie",
+          "softening": "Zmiękczanie"
+        }
+      },
+      "salt_level": {
+        "name": "Poziom soli"
+      },
+      "available_water": {
+        "name": "Dostępna woda"
+      },
+      "water_usage_today": {
+        "name": "Dzisiejsze zużycie wody"
+      },
+      "expected_regeneration_date": {
+        "name": "Oczekiwana data regeneracji"
+      },
+      "last_regeneration": {
+        "name": "Ostatnia regeneracja"
+      }
+    },
+    "binary_sensor": {
+      "is_online": {
+        "name": "Połączenie",
+        "state": {
+          "on": "Połączony",
+          "off": "Brak połączenia"
+        }
+      },
+      "is_update": {
+        "name": "Aktualizacja",
+        "state": {
+          "on": "Aktualizacja dostępna",
+          "off": "Brak aktualizacji"
+        }
+      }
     }
   }
 }
+

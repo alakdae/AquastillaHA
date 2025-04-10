@@ -15,7 +15,7 @@ async def async_setup_entry(
     hass_data["unsub_options_update_listener"] = unsub_options_update_listener
     hass.data[DOMAIN][entry.entry_id] = hass_data
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+    await hass.config_entries.async_forward_entry_setups(entry, ["sensor", "binary_sensor"])
 
     return True
 
@@ -29,7 +29,10 @@ async def options_update_listener(
 async def async_unload_entry(
     hass: core.HomeAssistant, entry: config_entries.ConfigEntry
 ) -> bool:
-    unload_ok = await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+    unload_ok = all(await asyncio.gather(
+        hass.config_entries.async_forward_entry_unload(entry, "sensor"),
+        hass.config_entries.async_forward_entry_unload(entry, "binary_sensor"),
+    ))
 
     hass.data[DOMAIN][entry.entry_id]["unsub_options_update_listener"]()
 
