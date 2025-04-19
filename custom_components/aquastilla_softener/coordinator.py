@@ -44,6 +44,11 @@ class AquastillaSoftenerCoordinator(DataUpdateCoordinator):
         self._device = device
         self.device_data: Optional[AquastillaSoftenerData] = None  # type hint
 
+    @property
+    def api(self) -> AquastillaSoftener:
+        """Expose the underlying API client for use in entities."""
+        return self._softener
+
     async def _async_update_data(self) -> AquastillaSoftenerData:
         try:
             data = await self.hass.async_add_executor_job(

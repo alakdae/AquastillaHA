@@ -38,6 +38,18 @@
       },
       "last_regeneration": {
         "name": "Last Regeneration"
+      },
+      "salt_days_remaining": {
+        "name": "Salt days remaining"
+      },
+      "salt_days_max": {
+        "name": "Salt days max"
+      },
+      "regen_percentage": {
+        "name": "Regeneration progress"
+      },
+      "firmware_upgrade_percentage": {
+        "name": "Firmware upgrade progress"
       }
     },
     "binary_sensor": {
@@ -55,7 +67,22 @@
           "off": "No upgrade"
         }
       }
+    },
+    "switch": {
+      "vacation_mode": {
+        "name": "Vacation mode"
+      }
+    },
+    "button": {
+      "force_regen": {
+        "name": "Force regeneration"
+      },
+      "close_valve": {
+        "name": "Close water flow valve"
+      },
+      "postpone_regeneration": {
+        "name": "Postpone regeneration"
+      }
     }
   }
 }
-

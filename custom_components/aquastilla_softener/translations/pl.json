@@ -38,6 +38,18 @@
       },
       "last_regeneration": {
         "name": "Ostatnia regeneracja"
+      },
+      "salt_days_remaining": {
+        "name": "Pozostałe dni soli"
+      },
+      "salt_days_max": {
+        "name": "Maksymalna liczba dni soli"
+      },
+      "regen_percentage": {
+        "name": "Postęp regeneracji"
+      },
+      "firmware_upgrade_percentage": {
+        "name": "Postęp aktualizacji"
       }
     },
     "binary_sensor": {
@@ -55,7 +67,22 @@
           "off": "Brak aktualizacji"
         }
       }
+    },
+    "switch": {
+      "vacation_mode": {
+        "name": "Tryb wakacyjny"
+      }
+    },
+    "button": {
+      "force_regen": {
+        "name": "Wymuś regenerację"
+      },
+      "close_valve": {
+        "name": "Zamknij zawór"
+      },
+      "postpone_regeneration": {
+        "name": "Odłóż regenerację"
+      }
     }
   }
 }
-

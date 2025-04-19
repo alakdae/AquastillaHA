@@ -72,6 +72,14 @@ async def async_setup_entry(
                 key="EXPECTED_REGENERATION_DATE", translation_key="expected_regeneration_date", device_class=SensorDeviceClass.TIMESTAMP)),
             (AquastillaSoftenerLastRegenerationSensor, SensorEntityDescription(
                 key="LAST_REGENERATION", translation_key="last_regeneration", device_class=SensorDeviceClass.TIMESTAMP)),
+            (AquastillaSoftenerSaltDaysRemainingSensor, SensorEntityDescription(
+                key="SALT_DAYS_REMAINING", translation_key="salt_days_remaining", state_class=SensorStateClass.MEASUREMENT, icon="mdi:calendar-clock")),
+            (AquastillaSoftenerSaltDaysMaxSensor, SensorEntityDescription(
+                key="SALT_DAYS_MAX", translation_key="salt_days_max", state_class=SensorStateClass.MEASUREMENT, icon="mdi:calendar-range")),
+            (AquastillaSoftenerRegenPercentageSensor, SensorEntityDescription(
+                key="REGEN_PERCENTAGE", translation_key="regen_percentage", state_class=SensorStateClass.MEASUREMENT, native_unit_of_measurement=PERCENTAGE, icon="mdi:restore")),
+            (AquastillaSoftenerFirmwareUpgradePercentageSensor, SensorEntityDescription(
+                key="FIRMWARE_UPGRADE_PERCENTAGE", translation_key="firmware_upgrade_percentage", state_class=SensorStateClass.MEASUREMENT, native_unit_of_measurement=PERCENTAGE, icon="mdi:download"))
         )
     ]
 
@@ -169,4 +177,24 @@ class AquastillaSoftenerExpectedRegenerationSensor(AquastillaSoftenerSensor):
 class AquastillaSoftenerLastRegenerationSensor(AquastillaSoftenerSensor):
     def update(self, data: AquastillaSoftenerData):
         self._attr_native_value = data.last_regeneration
+
+
+class AquastillaSoftenerSaltDaysRemainingSensor(AquastillaSoftenerSensor):
+    def update(self, data: AquastillaSoftenerData):
+        self._attr_native_value = data.salt_days_remaining
+
+
+class AquastillaSoftenerSaltDaysMaxSensor(AquastillaSoftenerSensor):
+    def update(self, data: AquastillaSoftenerData):
+        self._attr_native_value = data.salt_days_max
+
+
+class AquastillaSoftenerRegenPercentageSensor(AquastillaSoftenerSensor):
+    def update(self, data: AquastillaSoftenerData):
+        self._attr_native_value = data.regen_percentage
+
+
+class AquastillaSoftenerFirmwareUpgradePercentageSensor(AquastillaSoftenerSensor):
+    def update(self, data: AquastillaSoftenerData):
+        self._attr_native_value = data.firmware_upgrade_percentage
 
