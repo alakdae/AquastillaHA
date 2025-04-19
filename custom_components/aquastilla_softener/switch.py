@@ -106,6 +106,8 @@ class AquastillaSoftenerVacationModeSwitch(AquastillaSoftenerSwitch):
             self._device,
             1
         )
+        self._attr_is_on = True
+        self.async_write_ha_state()
         await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs):
@@ -114,5 +116,7 @@ class AquastillaSoftenerVacationModeSwitch(AquastillaSoftenerSwitch):
             self._device,
             0
         )
+        self._attr_is_on = False
+        self.async_write_ha_state()
         await self.coordinator.async_request_refresh()
 
