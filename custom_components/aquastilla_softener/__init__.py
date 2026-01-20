@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from homeassistant import config_entries, core
 from aquastilla_softener import AquastillaSoftener
 from .const import DOMAIN
