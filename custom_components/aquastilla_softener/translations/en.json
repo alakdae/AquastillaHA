@@ -16,11 +16,11 @@
       "state": {
         "name": "State",
         "state": {
-          "brineRefill": "Brine refill",
-          "saltDissolve": "Salt dissolving",
+          "brine_refill": "Brine refill",
+          "salt_dissolve": "Salt dissolving",
           "backwash": "Backwash",
-          "brineCollect": "Brine collecting",
-          "fastWash": "Fast wash",
+          "brine_collect": "Brine collecting",
+          "fast_wash": "Fast wash",
           "softening": "Softening"
         }
       },

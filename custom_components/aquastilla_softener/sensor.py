@@ -127,11 +127,11 @@ class AquastillaSoftenerSensor(SensorEntity, CoordinatorEntity, ABC):
 class AquastillaSoftenerStateSensor(AquastillaSoftenerSensor):
     def update(self, data: AquastillaSoftenerData):
         state_map = {
-            "deviceStateRegenBrineRefill": "brineRefill",
-            "deviceStateRegenSaltDissolve": "saltDissolve",
+            "deviceStateRegenBrineRefill": "brine_refill",
+            "deviceStateRegenSaltDissolve": "salt_dissolve",
             "deviceStateRegenBackwash": "backwash",
-            "deviceStateRegenBrineCollect": "brineCollect",
-            "deviceStateRegenFastwash": "fastWash",
+            "deviceStateRegenBrineCollect": "brine_collect",
+            "deviceStateRegenFastwash": "fast_wash",
             "deviceStateSoftening": "softening"
         }
         raw_state = data.state.value

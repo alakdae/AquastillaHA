@@ -16,11 +16,11 @@
       "state": {
         "name": "Stan",
         "state": {
-          "brineRefill": "Uzupełnianie solanki",
-          "saltDissolve": "Rozpuszczanie soli",
+          "brine_refill": "Uzupełnianie solanki",
+          "salt_dissolve": "Rozpuszczanie soli",
           "backwash": "Płukanie wsteczne",
-          "brineCollect": "Zbieranie solanki",
-          "fastWash": "Szybkie płukanie",
+          "brine_collect": "Zbieranie solanki",
+          "fast_wash": "Szybkie płukanie",
           "softening": "Zmiękczanie"
         }
       },

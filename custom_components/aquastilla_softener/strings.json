@@ -10,14 +10,5 @@
         "title": "Setup"
       }
     }
-  },
-  "sensor": {
-    "aquastillasoftener": {
-      "salt_level": "Salt level",
-      "available_water": "Available water",
-      "water_usage_today": "Today water usage",
-      "expected_regeneration": "Expected Regeneration Date",
-      "last_regeneration": "Last Regeneration"
-    }
   }
 }

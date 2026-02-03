@@ -1,13 +1,13 @@
 {
   "domain": "aquastilla_softener",
   "name": "Aquastilla Softener",
-  "documentation": "https://github.com/alakdae/AquastillaHA/",
-  "issue_tracker": "https://github.com/alakdae/AquastillaHA/issues",
-  "dependencies": [],
   "codeowners": ["@alakdae"],
-  "requirements": ["aquastilla_softener>=0.4.2"],
   "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/alakdae/AquastillaHA/",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/alakdae/AquastillaHA/issues",
   "loggers": ["aquastilla_softener"],
+  "requirements": ["aquastilla_softener>=0.4.2"],
   "version": "0.4.0"
 }
