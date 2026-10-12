@@ -28,19 +28,8 @@ async def async_setup_entry(
     config_entry: config_entries.ConfigEntry,
     async_add_entities,
 ):
-    config = hass.data[DOMAIN][config_entry.entry_id]
-    if config_entry.options:
-        config.update(config_entry.options)
-
-    device = config[CONF_DEVICE]
-
-    coordinator = AquastillaSoftenerCoordinator(
-        hass,
-        AquastillaSoftener(config[CONF_USERNAME], config[CONF_PASSWORD]),
-        device,
-    )
-
-    await coordinator.async_config_entry_first_refresh()
+    coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
+    device = coordinator._device
 
     switches = [
         AquastillaSoftenerVacationModeSwitch(

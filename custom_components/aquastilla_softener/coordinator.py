@@ -49,8 +49,19 @@ class AquastillaSoftenerCoordinator(DataUpdateCoordinator):
         """Expose the underlying API client for use in entities."""
         return self._softener
 
+    def _refresh_device(self) -> None:
+        """Reload the device record; it carries the last regeneration date."""
+        try:
+            for dev in self._softener.list_devices():
+                if dev.get("uuid") == self._device["uuid"]:
+                    self._device = dev
+                    return
+        except Exception as err:
+            _LOGGER.debug("Could not refresh device info: %s", err)
+
     async def _async_update_data(self) -> AquastillaSoftenerData:
         try:
+            await self.hass.async_add_executor_job(self._refresh_device)
             data = await self.hass.async_add_executor_job(
                 self._softener.get_device_data, self._device
             )

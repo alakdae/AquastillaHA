@@ -2,7 +2,8 @@ import logging
 import asyncio
 from homeassistant import config_entries, core
 from aquastilla_softener import AquastillaSoftener
-from .const import DOMAIN
+from .const import DOMAIN, CONF_USERNAME, CONF_PASSWORD, CONF_DEVICE
+from .coordinator import AquastillaSoftenerCoordinator
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -11,6 +12,16 @@ async def async_setup_entry(
 ) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass_data = dict(entry.data)
+    hass_data.update(entry.options)
+
+    coordinator = AquastillaSoftenerCoordinator(
+        hass,
+        AquastillaSoftener(hass_data[CONF_USERNAME], hass_data[CONF_PASSWORD]),
+        hass_data[CONF_DEVICE],
+    )
+    # Raises ConfigEntryNotReady on failure so HA retries (e.g. network not up after boot)
+    await coordinator.async_config_entry_first_refresh()
+    hass_data["coordinator"] = coordinator
 
     unsub_options_update_listener = entry.add_update_listener(options_update_listener)
     hass_data["unsub_options_update_listener"] = unsub_options_update_listener
